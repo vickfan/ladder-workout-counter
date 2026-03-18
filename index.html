@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ladder Workout Counter</title>
+    <meta name="theme-color" content="#0b1220" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="stylesheet" href="/index.css" />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <section class="card" data-view="home">
+        <header class="header">
+          <h1 class="title">Ladder Workout Counter</h1>
+          <p class="subtitle">Set max reps and rest. Tap through the ladder.</p>
+        </header>
+
+        <form class="form" id="homeForm">
+          <label class="field">
+            <span class="label">Max reps</span>
+            <input
+              class="input"
+              id="maxRepInput"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              step="1"
+              placeholder="e.g. 3"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span class="label">Rest interval (seconds)</span>
+            <input
+              class="input"
+              id="restSecInput"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              step="1"
+              placeholder="e.g. 60"
+              required
+            />
+          </label>
+
+          <button class="button primary" id="startButton" type="submit" disabled>
+            Start workout
+          </button>
+          <p class="hint" id="homeHint">Enter both values to start.</p>
+        </form>
+      </section>
+
+      <section class="card hidden tappable" data-view="rep" id="repView" role="button" tabindex="0">
+        <div class="bigNumber" id="repNumber">1</div>
+        <div class="bigLabel">reps</div>
+        <div class="tapHint">Tap anywhere to start rest timer</div>
+      </section>
+
+      <section
+        class="card hidden tappable"
+        data-view="timer"
+        id="timerView"
+        role="button"
+        tabindex="0"
+      >
+        <div class="timerNumber" id="timerNumber">60</div>
+        <div class="timerLabel" id="timerLabel">seconds</div>
+        <div class="tapHint" id="timerHint">Tap anywhere to cancel and go back</div>
+      </section>
+    </main>
+
+    <script src="/index.js" defer></script>
+  </body>
+</html>

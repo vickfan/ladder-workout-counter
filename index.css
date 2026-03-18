@@ -1,0 +1,189 @@
+.app,
+body,
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+    calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+  background: radial-gradient(1200px 800px at 20% 10%, #1f2937, #0b1220);
+  color: #e5e7eb;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  width: min(520px, 100%);
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+}
+
+.hidden {
+  display: none;
+}
+
+.header {
+  margin-bottom: 18px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: rgba(229, 231, 235, 0.75);
+  line-height: 1.35;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  color: rgba(229, 231, 235, 0.85);
+  font-size: 14px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(2, 6, 23, 0.4);
+  color: #e5e7eb;
+  outline: none;
+  font-size: 16px;
+}
+
+.input:focus {
+  border-color: rgba(59, 130, 246, 0.7);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.button.primary {
+  background: linear-gradient(135deg, #60a5fa, #2563eb);
+  color: #071019;
+  font-weight: 700;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.hint {
+  margin: 0;
+  color: rgba(229, 231, 235, 0.65);
+  font-size: 13px;
+}
+
+.tappable {
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  text-align: center;
+  padding: 44px 22px;
+}
+
+.tappable:active {
+  transform: scale(0.995);
+}
+
+.bigNumber {
+  font-size: 120px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.bigLabel {
+  margin-top: 8px;
+  font-size: 18px;
+  color: rgba(229, 231, 235, 0.85);
+}
+
+.tapHint {
+  margin-top: 16px;
+  color: rgba(229, 231, 235, 0.6);
+  font-size: 14px;
+}
+
+.timerNumber {
+  font-size: 96px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+@media (max-width: 420px) {
+  .card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .tappable {
+    padding: 56px 18px;
+  }
+
+  .bigNumber {
+    font-size: 104px;
+  }
+
+  .timerNumber {
+    font-size: 86px;
+  }
+}
+
+@media (min-width: 900px) {
+  .card {
+    width: min(640px, 100%);
+  }
+
+  .bigNumber {
+    font-size: 140px;
+  }
+
+  .timerNumber {
+    font-size: 112px;
+  }
+}
+
+.timerLabel {
+  margin-top: 10px;
+  font-size: 16px;
+  color: rgba(229, 231, 235, 0.8);
+}
