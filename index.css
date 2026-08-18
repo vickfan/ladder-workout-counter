@@ -113,8 +113,10 @@ body {
 
 .history {
   margin-top: 28px;
-  border-top: 1px solid rgba(148, 163, 184, 0.16);
-  padding-top: 22px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.2);
 }
 
 .historyHeader {
@@ -138,6 +140,8 @@ body {
 .historyList {
   display: grid;
   gap: 9px;
+  max-height: 210px;
+  overflow-y: auto;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -152,6 +156,21 @@ body {
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 12px;
   background: rgba(2, 6, 23, 0.28);
+  cursor: pointer;
+  touch-action: pan-y;
+  user-select: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.historyItem:focus-visible {
+  border-color: rgba(96, 165, 250, 0.55);
+  background: rgba(96, 165, 250, 0.1);
+  outline: none;
+}
+
+.historyItem.deleteMode {
+  border-color: rgba(248, 113, 113, 0.65);
+  background: rgba(127, 29, 29, 0.28);
 }
 
 .historyDetails {
@@ -170,13 +189,21 @@ body {
   font-weight: 650;
 }
 
-.historyButton {
+.historyDeleteButton {
+  display: none;
   flex: 0 0 auto;
   min-height: 36px;
   padding: 8px 12px;
-  background: rgba(96, 165, 250, 0.16);
-  color: #bfdbfe;
+  border: 0;
+  border-radius: 10px;
+  background: #dc2626;
+  color: #fff;
   font-size: 14px;
+  cursor: pointer;
+}
+
+.historyItem.deleteMode .historyDeleteButton {
+  display: block;
 }
 
 .tappable {

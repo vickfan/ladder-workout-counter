@@ -20,6 +20,8 @@ const historyList = $('#historyList')
 let workout = null
 let timer = null
 let audio = null
+let deleteModeId = null
+let historyTouch = null
 
 const historyStorageKey = 'ladder-workout-counter-history'
 const maxHistoryRecords = 10
@@ -67,15 +69,14 @@ function formatHistoryDate(isoDate) {
   const date = new Date(isoDate)
   if (Number.isNaN(date.getTime())) return 'Unknown date'
 
-  return `${new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Singapore',
+  return new Intl.DateTimeFormat(undefined, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-  }).format(date)} (UTC+8)`
+  }).format(date)
 }
 
 function renderHistory(records = readHistory()) {
@@ -86,6 +87,9 @@ function renderHistory(records = readHistory()) {
   for (const record of records) {
     const item = document.createElement('li')
     item.className = 'historyItem'
+    item.classList.toggle('deleteMode', record.id === deleteModeId)
+    item.tabIndex = 0
+    item.dataset.recordId = record.id
 
     const details = document.createElement('div')
     details.className = 'historyDetails'
@@ -98,22 +102,99 @@ function renderHistory(records = readHistory()) {
     setup.className = 'historySetup'
     setup.textContent = `Max ${record.maxRep} reps · ${record.restSec}s rest`
 
-    const start = document.createElement('button')
-    start.className = 'button historyButton'
-    start.type = 'button'
-    start.textContent = 'Start'
-    start.addEventListener('click', () => {
+    const deleteButton = document.createElement('button')
+    deleteButton.className = 'historyDeleteButton'
+    deleteButton.type = 'button'
+    deleteButton.textContent = 'Delete'
+
+    const startWorkoutFromHistory = () => {
+      if (deleteModeId === record.id) {
+        deleteHistoryRecord(record.id)
+        return
+      }
+
       const maxRep = clampPositiveInt(record.maxRep)
       const restSec = clampPositiveInt(record.restSec)
       if (!maxRep || !restSec) return
       unlockAudioIfNeeded()
       startWorkout({ maxRep, restSec })
-    })
+    }
 
     details.append(date, setup)
-    item.append(details, start)
+    item.append(details, deleteButton)
+    item.addEventListener('click', (e) => {
+      if (e.target === deleteButton) return
+      if (item.dataset.swipeHandled === 'true') {
+        delete item.dataset.swipeHandled
+        return
+      }
+      if (deleteModeId && deleteModeId !== record.id) {
+        setDeleteMode(null)
+        return
+      }
+      startWorkoutFromHistory()
+    })
+    item.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return
+      e.preventDefault()
+      if (deleteModeId && deleteModeId !== record.id) {
+        setDeleteMode(null)
+        return
+      }
+      startWorkoutFromHistory()
+    })
+    item.addEventListener(
+      'touchstart',
+      (e) => {
+        const touch = e.changedTouches[0]
+        historyTouch = { item, startX: touch.clientX, startY: touch.clientY }
+      },
+      { passive: true },
+    )
+    item.addEventListener(
+      'touchend',
+      (e) => {
+        if (!historyTouch || historyTouch.item !== item) return
+
+        const touch = e.changedTouches[0]
+        const deltaX = touch.clientX - historyTouch.startX
+        const deltaY = touch.clientY - historyTouch.startY
+        historyTouch = null
+
+        if (deltaX >= -40 || Math.abs(deltaX) <= Math.abs(deltaY)) return
+
+        item.dataset.swipeHandled = 'true'
+        setDeleteMode(record.id)
+        setTimeout(() => {
+          delete item.dataset.swipeHandled
+        }, 0)
+      },
+      { passive: true },
+    )
+    deleteButton.addEventListener('click', (e) => {
+      e.stopPropagation()
+      deleteHistoryRecord(record.id)
+    })
     historyList.append(item)
   }
+}
+
+function setDeleteMode(id) {
+  deleteModeId = id
+  for (const item of historyList.children) {
+    item.classList.toggle('deleteMode', item.dataset.recordId === id)
+  }
+}
+
+function deleteHistoryRecord(id) {
+  const records = readHistory().filter((record) => record.id !== id)
+
+  try {
+    localStorage.setItem(historyStorageKey, JSON.stringify(records))
+  } catch {}
+
+  deleteModeId = null
+  renderHistory(records)
 }
 
 function makeLadder(maxRep) {
@@ -343,6 +424,12 @@ homeForm.addEventListener('submit', (e) => {
 
 bindTap(repView, onRepActivate)
 bindTap(timerView, onTimerActivate)
+
+document.addEventListener('click', (e) => {
+  if (!deleteModeId) return
+  const activeItem = [...historyList.children].find((item) => item.dataset.recordId === deleteModeId)
+  if (!activeItem?.contains(e.target)) setDeleteMode(null)
+})
 
 resetToHome()
 renderHistory()

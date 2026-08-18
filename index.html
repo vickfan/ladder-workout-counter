@@ -17,40 +17,43 @@
           <p class="subtitle">Set max reps and rest. Tap through the ladder.</p>
         </header>
 
-        <form class="form" id="homeForm">
-          <label class="field">
-            <span class="label">Max reps</span>
-            <input
-              class="input"
-              id="maxRepInput"
-              type="number"
-              inputmode="numeric"
-              min="1"
-              step="1"
-              placeholder="e.g. 3"
-              required
-            />
-          </label>
+        <section class="formSection" aria-labelledby="formTitle">
+          <h2 class="sectionTitle" id="formTitle">Start a workout</h2>
+          <form class="form" id="homeForm">
+            <label class="field">
+              <span class="label">Max reps</span>
+              <input
+                class="input"
+                id="maxRepInput"
+                type="number"
+                inputmode="numeric"
+                min="1"
+                step="1"
+                placeholder="e.g. 3"
+                required
+              />
+            </label>
 
-          <label class="field">
-            <span class="label">Rest interval (seconds)</span>
-            <input
-              class="input"
-              id="restSecInput"
-              type="number"
-              inputmode="numeric"
-              min="1"
-              step="1"
-              placeholder="e.g. 60"
-              required
-            />
-          </label>
+            <label class="field">
+              <span class="label">Rest interval (seconds)</span>
+              <input
+                class="input"
+                id="restSecInput"
+                type="number"
+                inputmode="numeric"
+                min="1"
+                step="1"
+                placeholder="e.g. 60"
+                required
+              />
+            </label>
 
-          <button class="button primary" id="startButton" type="submit" disabled>
-            Start workout
-          </button>
-          <p class="hint" id="homeHint">Enter both values to start.</p>
-        </form>
+            <button class="button primary" id="startButton" type="submit" disabled>
+              Start workout
+            </button>
+            <p class="hint" id="homeHint">Enter both values to start.</p>
+          </form>
+        </section>
 
         <section class="history hidden" id="historySection" aria-labelledby="historyTitle">
           <div class="historyHeader">
