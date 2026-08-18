@@ -13,10 +13,16 @@ const timerView = $('#timerView')
 const timerNumber = $('#timerNumber')
 const timerLabel = $('#timerLabel')
 const timerHint = $('#timerHint')
+const historySection = $('#historySection')
+const historyCount = $('#historyCount')
+const historyList = $('#historyList')
 
 let workout = null
 let timer = null
 let audio = null
+
+const historyStorageKey = 'ladder-workout-counter-history'
+const maxHistoryRecords = 10
 
 function clampPositiveInt(value) {
   const n = Number(value)
@@ -24,6 +30,90 @@ function clampPositiveInt(value) {
   const i = Math.floor(n)
   if (i < 1) return null
   return i
+}
+
+function readHistory() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(historyStorageKey) || '[]')
+    if (!Array.isArray(saved)) return []
+
+    return saved
+      .filter((record) => clampPositiveInt(record.maxRep) && clampPositiveInt(record.restSec) && record.startedAt)
+      .slice(0, maxHistoryRecords)
+  } catch {
+    return []
+  }
+}
+
+function saveHistory(maxRep, restSec) {
+  const records = [
+    {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      maxRep,
+      restSec,
+      startedAt: new Date().toISOString(),
+    },
+    ...readHistory(),
+  ].slice(0, maxHistoryRecords)
+
+  try {
+    localStorage.setItem(historyStorageKey, JSON.stringify(records))
+  } catch {}
+
+  renderHistory(records)
+}
+
+function formatHistoryDate(isoDate) {
+  const date = new Date(isoDate)
+  if (Number.isNaN(date.getTime())) return 'Unknown date'
+
+  return `${new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Singapore',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date)} (UTC+8)`
+}
+
+function renderHistory(records = readHistory()) {
+  historyList.replaceChildren()
+  historySection.classList.toggle('hidden', records.length === 0)
+  historyCount.textContent = records.length ? `${records.length}/${maxHistoryRecords}` : ''
+
+  for (const record of records) {
+    const item = document.createElement('li')
+    item.className = 'historyItem'
+
+    const details = document.createElement('div')
+    details.className = 'historyDetails'
+
+    const date = document.createElement('span')
+    date.className = 'historyDate'
+    date.textContent = formatHistoryDate(record.startedAt)
+
+    const setup = document.createElement('span')
+    setup.className = 'historySetup'
+    setup.textContent = `Max ${record.maxRep} reps · ${record.restSec}s rest`
+
+    const start = document.createElement('button')
+    start.className = 'button historyButton'
+    start.type = 'button'
+    start.textContent = 'Start'
+    start.addEventListener('click', () => {
+      const maxRep = clampPositiveInt(record.maxRep)
+      const restSec = clampPositiveInt(record.restSec)
+      if (!maxRep || !restSec) return
+      unlockAudioIfNeeded()
+      startWorkout({ maxRep, restSec })
+    })
+
+    details.append(date, setup)
+    item.append(details, start)
+    historyList.append(item)
+  }
 }
 
 function makeLadder(maxRep) {
@@ -247,6 +337,7 @@ homeForm.addEventListener('submit', (e) => {
   if (!maxRep || !restSec) return
 
   unlockAudioIfNeeded()
+  saveHistory(maxRep, restSec)
   startWorkout({ maxRep, restSec })
 })
 
@@ -254,3 +345,4 @@ bindTap(repView, onRepActivate)
 bindTap(timerView, onTimerActivate)
 
 resetToHome()
+renderHistory()
