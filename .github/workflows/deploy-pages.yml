@@ -1,6 +1,6 @@
 # Deploy static assets to Cloudflare Pages when a tag like deploy-1.2.3 is pushed.
 #
-# Required repository secrets:
+# Required secrets in the GitHub Environment "PROD":
 #   CLOUDFLARE_API_TOKEN       - API token with Account → Cloudflare Pages → Edit
 #   CLOUDFLARE_ACCOUNT_ID      - Cloudflare account ID
 #   CLOUDFLARE_PAGES_PROJECT   - Cloudflare Pages project name
@@ -20,6 +20,7 @@ jobs:
   deploy:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
+    environment: PROD
     permissions:
       contents: read
       deployments: write
