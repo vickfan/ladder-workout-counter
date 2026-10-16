@@ -5,8 +5,11 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "tunnel": "cloudflared tunnel --url http://localhost:3001",
+    "dev:tunnel": "node scripts/dev-tunnel.js"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
