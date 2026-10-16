@@ -3,7 +3,9 @@
 # Required secrets in the GitHub Environment "PROD":
 #   CLOUDFLARE_API_TOKEN       - API token with Account → Cloudflare Pages → Edit
 #   CLOUDFLARE_ACCOUNT_ID      - Cloudflare account ID
-#   CLOUDFLARE_PAGES_PROJECT   - Cloudflare Pages project name
+#
+# Optional secret in "PROD":
+#   CLOUDFLARE_PAGES_PROJECT   - Pages project name (defaults to ladder-workout-counter)
 #
 # Usage:
 #   git tag deploy-1.0.0
@@ -24,6 +26,8 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    env:
+      PAGES_PROJECT: ${{ secrets.CLOUDFLARE_PAGES_PROJECT || 'ladder-workout-counter' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -38,5 +42,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PAGES_PROJECT }} --branch=main
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
