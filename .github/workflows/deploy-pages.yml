@@ -1,0 +1,45 @@
+# Deploy static assets to Cloudflare Pages when a tag like deploy-1.2.3 is pushed.
+#
+# Required repository secrets:
+#   CLOUDFLARE_API_TOKEN   - API token with Account → Cloudflare Pages → Edit
+#   CLOUDFLARE_ACCOUNT_ID  - Cloudflare account ID
+#
+# Optional repository variable:
+#   CLOUDFLARE_PAGES_PROJECT - Pages project name (defaults to ladder-workout-counter)
+#
+# Usage:
+#   git tag deploy-1.0.0
+#   git push origin deploy-1.0.0
+
+name: Deploy Cloudflare Pages
+
+on:
+  push:
+    tags:
+      - 'deploy-[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    env:
+      PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'ladder-workout-counter' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Prepare static assets
+        run: |
+          mkdir -p dist
+          cp index.html index.css index.js dist/
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }} --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
