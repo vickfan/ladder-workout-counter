@@ -35,11 +35,88 @@ body {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .header {
   margin-bottom: 18px;
+  position: relative;
+  padding-right: 108px;
+}
+
+.modeToggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.summaryLabel {
+  text-align: left;
+  min-width: 0;
+}
+
+.summaryValue {
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+.exerciseRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exerciseRow .input {
+  width: auto;
+  flex: 1;
+  min-width: 0;
+}
+
+#setupSummary {
+  display: grid;
+  gap: 12px;
+}
+
+#setupSummary.deleteMode {
+  border-color: rgba(248, 113, 113, 0.65);
+}
+
+.summaryDeleteButton {
+  justify-self: end;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dragHandle {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  flex: 0 0 auto;
+}
+
+.repName {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.exerciseList {
+  display: grid;
+  gap: 10px;
 }
 
 .title {
@@ -281,4 +358,31 @@ body {
   margin-top: 10px;
   font-size: 16px;
   color: rgba(229, 231, 235, 0.8);
+}
+
+.timerMenu {
+  width: min(420px, calc(100% - 32px));
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  background: rgba(17, 24, 39, 0.96);
+  color: #e5e7eb;
+}
+
+.timerMenu::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.timerMenuRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.timerMenu .button {
+  width: 100%;
+}
+
+#timerCancel {
+  margin-top: 10px;
 }
