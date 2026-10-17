@@ -12,13 +12,15 @@ body {
 .app {
   min-height: 100svh;
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-content: safe center;
   padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
     calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
   background: radial-gradient(1200px 800px at 20% 10%, #1f2937, #0b1220);
   color: #e5e7eb;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
     "Segoe UI Emoji";
+  overflow-x: hidden;
 }
 
 * {
@@ -27,6 +29,9 @@ body {
 
 .card {
   width: min(520px, 100%);
+  max-width: 100%;
+  min-width: 0;
+  container-type: inline-size;
   background: rgba(17, 24, 39, 0.8);
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 18px;
@@ -48,6 +53,9 @@ body {
   position: absolute;
   top: 0;
   right: 0;
+  min-width: 96px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .summaryRow {
@@ -71,12 +79,57 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  width: 100%;
 }
 
 .exerciseRow .input {
   width: auto;
-  flex: 1;
   min-width: 0;
+}
+
+.exerciseRow .exerciseName {
+  flex: 1 1 auto;
+}
+
+.exerciseRow .exerciseMaxRep {
+  flex: 0 0 4.25rem;
+  width: 4.25rem;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center;
+}
+
+.exerciseRemove {
+  flex: 0 0 auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.16);
+  color: #e5e7eb;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dragHandle {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.12);
+  color: rgba(229, 231, 235, 0.85);
+  font-size: 18px;
+  line-height: 1;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  flex: 0 0 auto;
 }
 
 #setupSummary {
@@ -100,11 +153,11 @@ body {
   cursor: pointer;
 }
 
-.dragHandle {
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-  flex: 0 0 auto;
+#multiHome,
+#multiForm,
+#exerciseList {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .repName {
@@ -330,6 +383,53 @@ a.button {
   line-height: 1;
 }
 
+@container (max-width: 420px) {
+  .header {
+    padding-right: 0;
+    display: grid;
+    gap: 12px;
+  }
+
+  .modeToggle {
+    position: static;
+    justify-self: end;
+  }
+
+  .exerciseRow {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "handle name remove"
+      "handle maxrep remove";
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dragHandle {
+    grid-area: handle;
+    align-self: stretch;
+  }
+
+  .exerciseRow .exerciseName {
+    grid-area: name;
+    width: 100%;
+  }
+
+  .exerciseRow .exerciseMaxRep {
+    grid-area: maxrep;
+    flex: none;
+    width: 100%;
+    text-align: left;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .exerciseRemove {
+    grid-area: remove;
+    align-self: stretch;
+  }
+}
+
 @media (max-width: 420px) {
   .card {
     padding: 18px;
@@ -346,6 +446,11 @@ a.button {
 
   .timerNumber {
     font-size: 86px;
+  }
+
+  .repName {
+    font-size: 18px;
+    word-break: break-word;
   }
 }
 

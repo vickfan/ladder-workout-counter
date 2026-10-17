@@ -596,21 +596,26 @@ function createExerciseRow({ name, maxRep }) {
 
   const nameInput = document.createElement('input')
   nameInput.type = 'text'
-  nameInput.className = 'input'
+  nameInput.className = 'input exerciseName'
+  nameInput.placeholder = 'Exercise'
+  nameInput.autocomplete = 'off'
   nameInput.value = name
 
   const maxRepInput = document.createElement('input')
   maxRepInput.type = 'number'
-  maxRepInput.className = 'input'
+  maxRepInput.className = 'input exerciseMaxRep'
   maxRepInput.min = '1'
   maxRepInput.step = '1'
   maxRepInput.inputMode = 'numeric'
+  maxRepInput.placeholder = 'Max'
   maxRepInput.value = maxRep
+  maxRepInput.setAttribute('aria-label', 'Max reps')
 
   const removeButton = document.createElement('button')
   removeButton.type = 'button'
   removeButton.className = 'exerciseRemove'
-  removeButton.textContent = 'Remove'
+  removeButton.textContent = '×'
+  removeButton.setAttribute('aria-label', 'Remove')
   removeButton.addEventListener('click', () => removeExerciseRow(row))
 
   nameInput.addEventListener('input', updateMultiFormValidity)
