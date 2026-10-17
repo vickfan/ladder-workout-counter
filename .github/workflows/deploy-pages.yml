@@ -35,7 +35,7 @@ jobs:
       - name: Prepare static assets
         run: |
           mkdir -p dist/single dist/multi
-          cp index.html index.css index.js _redirects dist/
+          cp index.html index.css index.js dist/
           cp index.html dist/single/index.html
           cp index.html dist/multi/index.html
 

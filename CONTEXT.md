@@ -18,7 +18,7 @@
 
 **New setup form** — Blank form: one empty exercise row and an empty rest field. If a saved setup exists, back returns to the summary and drops unsaved edits. Start stays disabled until every name is trimmed and non-empty, every max reps is an integer ≥ 1, and the shared rest is an integer ≥ 1. Duplicate names are allowed. The filled form survives a mode switch in the same visit. Back, reload, and a successful start clear it.
 
-**Mode URLs** — Single home is `/single`. Multi home is `/multi`. `/` opens the last home mode (or single on first visit) and replaces to that mode’s URL. The mode toggle is a link in the home header (top right) to the other mode URL. Hidden during a workout, so the mode cannot change mid-session. Reload drops an in-progress workout and returns home for the current URL.
+**Mode URLs** — Single home is `/single/` (and `/single`). Multi home is `/multi/` (and `/multi`). `/` opens the last home mode (or single on first visit) and replaces to that mode’s URL. The mode toggle is a link in the home header (top right) to the other mode URL. Hidden during a workout, so the mode cannot change mid-session. Reload drops an in-progress workout and returns home for the current URL.
 
 **Workout screen** — Multi mode shows the exercise name centered above the big rep number. Single mode stays the number only. Hint is “Tap anywhere to continue” while another exercise remains in the round. Hint is “Tap anywhere to start rest timer” when the next tap starts rest, and on the final exercise.
 
