@@ -35,7 +35,7 @@ jobs:
       - name: Prepare static assets
         run: |
           mkdir -p dist
-          cp index.html index.css index.js dist/
+          cp index.html index.css index.js _redirects dist/
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v4
