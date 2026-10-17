@@ -937,7 +937,7 @@ function mountMultiHome() {
   const addExercise = document.createElement('button')
   addExercise.type = 'button'
   addExercise.id = 'addExercise'
-  addExercise.className = 'button'
+  addExercise.className = 'button addExercise'
   addExercise.textContent = 'Add exercise'
   addExercise.addEventListener('click', addExerciseRow)
 
