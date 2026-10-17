@@ -107,7 +107,7 @@ body {
   padding: 8px 10px;
   border: 0;
   border-radius: 10px;
-  background: #dc2626;
+  background: rgba(248, 113, 113, 0.55);
   color: #fff;
   font-size: 18px;
   line-height: 1;
@@ -115,13 +115,13 @@ body {
 }
 
 .button.addExercise {
-  background: #16a34a;
+  background: rgba(74, 222, 128, 0.45);
   color: #fff;
   font-weight: 700;
 }
 
 .button.addExercise:disabled {
-  background: #16a34a;
+  background: rgba(74, 222, 128, 0.45);
   color: #fff;
 }
 
