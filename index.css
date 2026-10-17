@@ -107,11 +107,22 @@ body {
   padding: 8px 10px;
   border: 0;
   border-radius: 10px;
-  background: rgba(148, 163, 184, 0.16);
-  color: #e5e7eb;
+  background: rgba(148, 163, 184, 0.12);
+  color: #f07878;
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
+}
+
+.button.addExercise {
+  background: rgba(148, 163, 184, 0.12);
+  color: #3dcf8a;
+  font-weight: 700;
+}
+
+.button.addExercise:disabled {
+  background: rgba(148, 163, 184, 0.12);
+  color: #3dcf8a;
 }
 
 .dragHandle {
