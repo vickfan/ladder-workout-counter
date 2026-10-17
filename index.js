@@ -48,6 +48,28 @@ function storeMode(mode) {
   } catch {}
 }
 
+function modeFromPath(pathname) {
+  const path = pathname.replace(/\/+$/, '') || '/'
+  if (path === '/multi') return 'multi'
+  if (path === '/single') return 'single'
+  return null
+}
+
+function pathForMode(mode) {
+  return mode === 'multi' ? '/multi' : '/single'
+}
+
+function syncModeUrl(mode, { replace = false } = {}) {
+  const path = pathForMode(mode)
+  if (location.pathname === path) return
+  if (replace) history.replaceState({ mode }, '', path)
+  else history.pushState({ mode }, '', path)
+}
+
+function resolveInitialMode() {
+  return modeFromPath(location.pathname) || readStoredMode()
+}
+
 function readMultiSetup() {
   try {
     const saved = JSON.parse(localStorage.getItem(multiSetupStorageKey))
@@ -860,22 +882,31 @@ function setHomeMode(mode) {
   else renderMultiHome()
   const modeToggle = $('#modeToggle')
   if (modeToggle) {
+    const otherMode = mode === 'single' ? 'multi' : 'single'
     modeToggle.textContent = mode === 'single' ? 'Single' : 'Multiple'
-    modeToggle.setAttribute('aria-pressed', 'true')
+    modeToggle.href = pathForMode(otherMode)
+    modeToggle.setAttribute('aria-label', mode === 'single' ? 'Single mode. Switch to multiple.' : 'Multiple mode. Switch to single.')
   }
+}
+
+function switchHomeMode(event) {
+  if (event) event.preventDefault()
+  const next = homeMode === 'single' ? 'multi' : 'single'
+  syncModeUrl(next)
+  setHomeMode(next)
 }
 
 function mountModeToggle() {
   const header = document.querySelector('.header')
   if (!header || $('#modeToggle')) return
-  const button = document.createElement('button')
-  button.type = 'button'
-  button.id = 'modeToggle'
-  button.className = 'button modeToggle'
-  button.textContent = homeMode === 'single' ? 'Single' : 'Multiple'
-  button.setAttribute('aria-pressed', 'true')
-  button.onclick = () => setHomeMode(homeMode === 'single' ? 'multi' : 'single')
-  header.append(button)
+  const link = document.createElement('a')
+  link.id = 'modeToggle'
+  link.className = 'button modeToggle'
+  link.textContent = homeMode === 'single' ? 'Single' : 'Multiple'
+  link.href = pathForMode(homeMode === 'single' ? 'multi' : 'single')
+  link.setAttribute('aria-label', homeMode === 'single' ? 'Single mode. Switch to multiple.' : 'Multiple mode. Switch to single.')
+  link.addEventListener('click', switchHomeMode)
+  header.append(link)
 }
 
 function mountMultiHome() {
@@ -1040,8 +1071,14 @@ function onDocumentClick(event) {
 
 document.addEventListener('click', onDocumentClick)
 
+window.addEventListener('popstate', () => {
+  const mode = modeFromPath(location.pathname) || 'single'
+  setHomeMode(mode)
+})
+
 function boot() {
-  homeMode = readStoredMode()
+  homeMode = resolveInitialMode()
+  syncModeUrl(homeMode, { replace: true })
   mountModeToggle()
   mountMultiHome()
   resetToHome()
