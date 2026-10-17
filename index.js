@@ -56,7 +56,7 @@ function modeFromPath(pathname) {
 }
 
 function pathForMode(mode) {
-  return mode === 'multi' ? '/multi' : '/single'
+  return mode === 'multi' ? '/multi/' : '/single/'
 }
 
 function syncModeUrl(mode, { replace = false } = {}) {
